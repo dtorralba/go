@@ -12,7 +12,7 @@ func TestPublishedTweetIsSaved(t *testing.T) {
 
 	//Initialization
 	tweetManager := service.NewTweetManager()
-	var tweet *domain.Tweet
+	var tweet domain.Tweet
 
 	//var tweet string = "This is my first tweet"
 	user := "grupoesfera"
@@ -23,13 +23,13 @@ func TestPublishedTweetIsSaved(t *testing.T) {
 	tweetManager.PublishTweet(tweet)
 
 	//Validation
-	publishedTweet := service.GetTweet()
-	if publishedTweet.User != user &&
-		publishedTweet.Text != text {
+	publishedTweet := tweetManager.GetTweet()
+	if publishedTweet.GetUser() != user &&
+		publishedTweet.GetText() != text {
 		t.Errorf("Expected tweet is %s: %s \nbut is %s: %s",
-			user, text, publishedTweet.User, publishedTweet.Text)
+			user, text, publishedTweet.GetUser(), publishedTweet.GetText())
 	}
-	if publishedTweet.Date == nil {
+	if publishedTweet.GetDate() == nil {
 		t.Error("Expected date can't be nil")
 	}
 }
@@ -37,7 +37,7 @@ func TestTweetWithoutUserIsNotPublished(t *testing.T) {
 
 	//Initialization
 	tweetManager := service.NewTweetManager()
-	var tweet *domain.Tweet
+	var tweet domain.Tweet
 
 	var user string
 	text := "This is my first tweet"
@@ -57,7 +57,7 @@ func TestTweetWithoutUserIsNotPublished(t *testing.T) {
 func TestTweetWhitoutTextIsNotPublished(t *testing.T) {
 	//Initialization
 	tweetManager := service.NewTweetManager()
-	var tweet *domain.Tweet
+	var tweet domain.Tweet
 
 	var text string
 	user := "Diego"
@@ -81,7 +81,7 @@ func TestTweetWhitoutTextIsNotPublished(t *testing.T) {
 func TestTweetWhichExceeding140CharactersIsNotPublished(t *testing.T) {
 	//Initialization
 	tweetManager := service.NewTweetManager()
-	var tweet *domain.Tweet
+	var tweet domain.Tweet
 
 	user := "Diego"
 	text := "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
@@ -102,7 +102,7 @@ func TestCanPublishAndRetrieveMoreThanOneTweet(t *testing.T) {
 	id := 0
 	// Initialization
 	tweetManager := service.NewTweetManager()
-	var tweet, secondTweet *domain.Tweet // Fill the tweets with data
+	var tweet, secondTweet domain.Tweet // Fill the tweets with data
 
 	user := "Diego"
 	text := "This is my first tweet"
@@ -140,7 +140,7 @@ func TestCanRetrieveTweetById(t *testing.T) {
 
 	//service.InitializeService()
 
-	var tweet *domain.Tweet
+	var tweet domain.Tweet
 	var id int
 
 	user := "grupoesfera"
@@ -163,7 +163,7 @@ func TestCanCountTheTweetsSentByAnUser(t *testing.T) {
 
 	//service.InitializeService()
 
-	var tweet, secondTweet, thirdTweet *domain.Tweet
+	var tweet, secondTweet, thirdTweet domain.Tweet
 	user := "grupoesfera"
 	anotherUser := "nick"
 	text := "This is my first tweet"
@@ -193,7 +193,7 @@ func TestCan(t *testing.T) {
 	//service.InitializeService()
 	var id int
 
-	var tweet, secondTweet, thirdTweet *domain.Tweet
+	var tweet, secondTweet, thirdTweet domain.Tweet
 	user := "grupoesfera"
 	anotherUser := "nick"
 	text := "This is my first tweet"
@@ -222,8 +222,8 @@ func TestCan(t *testing.T) {
 }
 
 func isValidTweet(t *testing.T, firstPublishedTweet domain.Tweet, id int, user string, text string) bool {
-	if firstPublishedTweet.Text == text {
-		if firstPublishedTweet.User == user {
+	if firstPublishedTweet.GetText() == text {
+		if firstPublishedTweet.GetUser() == user {
 			return true
 		}
 	}

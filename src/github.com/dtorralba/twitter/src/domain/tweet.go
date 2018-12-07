@@ -8,22 +8,40 @@ type Stringer interface {
 	String() string
 }
 
-type Tweet struct {
+type Tweet interface {
+	GetUser() string
+	GetText() string
+	GetDate() *time.Time
+}
+
+type TextTweet struct {
 	User string
 	Text string
 	Date *time.Time
 }
 
-func NewTweet(user string, text string) *Tweet {
+func NewTweet(user string, text string) TextTweet {
 	var time = time.Now()
-	tweet := Tweet{user, text, &time}
-	return &tweet
+	textTweet := TextTweet{user, text, &time}
+	return textTweet
 }
 
-func (tweet *Tweet) PrintableTweet() string {
-	return "@" + tweet.User + ": " + tweet.Text
+func (textTweet *TextTweet) PrintableTweet() string {
+	return "@" + textTweet.User + ": " + textTweet.Text
 }
 
-func (tweet *Tweet) String() string {
-	return "@" + tweet.User + ": " + tweet.Text
+func (textTweet *TextTweet) String() string {
+	return "@" + textTweet.User + ": " + textTweet.Text
+}
+
+func (tweet TextTweet) GetUser() string {
+	return tweet.User
+}
+
+func (tweet TextTweet) GetText() string {
+	return tweet.Text
+}
+
+func (tweet TextTweet) GetDate() *time.Time {
+	return tweet.Date
 }

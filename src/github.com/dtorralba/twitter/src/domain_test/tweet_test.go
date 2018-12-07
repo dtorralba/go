@@ -6,7 +6,7 @@ import (
 	"github.com/dtorralba/twitter/src/domain"
 )
 
-func TestCanGetAPrintableTweet(t *testing.T) {
+func TestTextTweetPrintsUserAndText(t *testing.T) {
 
 	// Initialization
 	tweet := domain.NewTweet("grupoesfera", "This is my tweet")

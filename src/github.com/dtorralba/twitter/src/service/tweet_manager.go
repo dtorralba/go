@@ -11,7 +11,7 @@ type TweetManager struct {
 }
 
 var emptyTweet domain.Tweet
-var newTweet domain.Tweet
+var NewTweet domain.Tweet
 
 var SliceTweetsByUser []domain.Tweet
 var id int
@@ -22,31 +22,31 @@ func NewTweetManager() *TweetManager {
 	return &v
 }
 
-func (tweetManager *TweetManager) PublishTweet(tweet *domain.Tweet) (int, error) {
+func (tweetManager *TweetManager) PublishTweet(tweet domain.Tweet) (int, error) {
 
-	if tweet.User == "" {
+	if tweet.GetUser() == "" {
 		return 0, fmt.Errorf("user is required")
 	}
 
-	if tweet.Text == "" {
+	if tweet.GetText() == "" {
 		return 0, fmt.Errorf("text is required")
 	}
 
-	if len(tweet.Text) > 140 {
+	if len(tweet.GetText()) > 140 {
 		return 0, fmt.Errorf("text exceed 140 characters")
 	}
 
-	newTweet = *tweet
+	NewTweet = tweet
 
-	tweetManager.SliceTweets = append(tweetManager.SliceTweets, newTweet)
+	tweetManager.SliceTweets = append(tweetManager.SliceTweets, NewTweet)
 
 	//Id por posicion en Slice
 	var id = len(tweetManager.SliceTweets) - 1
 	return id, nil
 }
 
-func GetTweet() domain.Tweet {
-	return newTweet
+func (tweetManager *TweetManager) GetTweet() domain.Tweet {
+	return NewTweet
 }
 
 func (tweetManager *TweetManager) InitializeService() {
@@ -70,7 +70,7 @@ func (tweetManager *TweetManager) GetTweetById(id int) (domain.Tweet, string) {
 func (tweetManager *TweetManager) CountTweetsByUser(user string) int {
 	count := 0
 	for _, valor := range tweetManager.SliceTweets {
-		if valor.User == user {
+		if valor.GetUser() == user {
 			count++
 		}
 	}
@@ -84,7 +84,7 @@ func (tweetManager *TweetManager) GetTweetsByUser(user string) []domain.Tweet {
 	tweetsByUser = make(map[string][]domain.Tweet)
 
 	for _, valor := range tweetManager.SliceTweets {
-		if valor.User == user {
+		if valor.GetUser() == user {
 			SliceTweetsByUser = append(SliceTweetsByUser, valor)
 		}
 	}
