@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/dtorralba/twitter/src/domain"
 )
@@ -10,13 +11,21 @@ type TweetManager struct {
 	SliceTweets []domain.Tweet
 }
 
+type TweetWriter interface {
+	Write(domain.Tweet)
+}
+
+type MemoryTweetWriter struct {
+	lastTweet domain.Tweet
+}
+
 var emptyTweet domain.Tweet
 var NewTweet domain.Tweet
 
 var SliceTweetsByUser []domain.Tweet
 var id int
 
-func NewTweetManager() *TweetManager {
+func NewTweetManager(tweetWriter TweetWriter) *TweetManager {
 	var v TweetManager
 	v.SliceTweets = make([]domain.Tweet, 0)
 	return &v
@@ -93,4 +102,44 @@ func (tweetManager *TweetManager) GetTweetsByUser(user string) []domain.Tweet {
 
 	println(tweetsByUser)
 	return tweetsByUser[user]
+}
+
+func NewMemoryTweetWriter() *MemoryTweetWriter {
+	return &MemoryTweetWriter{}
+}
+
+func (m *MemoryTweetWriter) Write(tweet domain.Tweet) {
+	m.lastTweet = tweet
+}
+
+func (m *MemoryTweetWriter) GetLastSavedTweet() domain.Tweet {
+	return m.lastTweet
+}
+
+type FileTweetWriter struct {
+	file *os.File
+}
+
+func NewFileTweetWriter() *FileTweetWriter {
+
+	file, _ := os.OpenFile(
+		"tweets.txt",
+		os.O_WRONLY|os.O_TRUNC|os.O_CREATE,
+		0666,
+	)
+
+	writer := new(FileTweetWriter)
+	writer.file = file
+
+	return writer
+}
+
+func (writer *FileTweetWriter) Write(tweet domain.Tweet) {
+
+	go func() {
+		if writer.file != nil {
+			byteSlice := []byte(tweet.PrintableTweet() + "\n")
+			writer.file.Write(byteSlice)
+		}
+	}()
 }

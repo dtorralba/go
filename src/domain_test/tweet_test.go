@@ -67,3 +67,54 @@ func TestQuoteTweetPrintsUserTextAndQuotedTweet(t *testing.T) {
 		t.Errorf("The expected text is %s but was %s", expectedText, text)
 	}
 }
+
+//Ejercicio 13
+/*func TestPublishedTweetIsSavedToExternalResource(t *testing.T) {
+
+	// Initialization
+	var tweetWriter service.TweetWriter
+	tweetWriter = service.NewMemoryTweetWriter() // Mock implementation
+	tweetManager := service.NewTweetManager(tweetWriter)
+
+	//Fill tweet
+	tweet := domain.NewTextTweet("grupoesfera", "This is my tweet")
+
+	// Operation
+	id, _ := tweetManager.PublishTweet(tweet)
+
+	// Validation
+	memoryWriter := (tweetWriter).(*service.MemoryTweetWriter)
+	savedTweet := memoryWriter.GetLastSavedTweet()
+
+	if savedTweet == nil {
+		println("Saved Tweet nil")
+	}
+
+	if savedTweet.GetId() != id {
+		return
+	}
+}
+
+func TestCanSearchForTweetContainingText(t *testing.T) {
+	// Initialization
+	var tweetWriter service.TweetWriter
+	tweetWriter = service.NewMemoryTweetWriter()
+	tweetManager := service.NewTweetManager(tweetWriter)
+	// Create and publish a tweet
+
+	// Operation
+	searchResult := make(chan domain.Tweet)
+	query := "first"
+	tweetManager.SearchTweetsContaining(query, searchResult)
+
+	// Validation
+	foundTweet := <-searchResult
+
+	if foundTweet == nil {
+		return
+	}
+	if !strings.Contains(foundTweet.GetText(), query) {
+		return
+	}
+}
+*/
